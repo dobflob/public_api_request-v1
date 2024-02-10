@@ -32,6 +32,7 @@ header h1 {
     font-size: 1.25em;
     color: rgba(50, 50, 50, 0.9);
     margin-top: 35px;
+    display: inline-block;
 }
 
 .search-input {
@@ -46,7 +47,7 @@ header h1 {
     border: 1px solid rgba(50, 50, 50, 0.9);
 }
 
-.search-submit {
+.search-submit, #settings {
     cursor: pointer;
     height: 33px;
     background: rgba(245, 245, 245, 0.9);
@@ -55,7 +56,8 @@ header h1 {
     transition: .4s ease-out;
 }
 
-.search-submit:active, .search-submit:hover, .search-submit:focus {
+.search-submit:active, .search-submit:hover, .search-submit:focus, 
+#settings:active, #settings:hover, #settings:focus {
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(50, 50, 50, 0.9);
 }
@@ -203,6 +205,9 @@ header h1 {
     transition: .4s ease-out;
   }
   
+  .hide {
+    display: none;
+  }
 
 /* ===================================== 
    Media Queries
