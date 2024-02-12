@@ -36,7 +36,7 @@ const modalClose = createHtmlElement('button', [
 const modalBtnContainer = createHtmlElement('div', [
     {name: 'class', val: 'modal-btn-container'}]);
 const searchInput = createHtmlElement('input', [
-    {name: 'type', val: 'search'}, 
+    {name: 'type', val: 'text'}, 
     {name: 'id', val: 'search-input'}, 
     {name: 'class', val: 'search-input'}, 
     {name: 'placeholder', val: 'Search...'}]);
@@ -171,6 +171,12 @@ function displaySettings() {
     
     //remove checked from the html template and instead look at the excludeFields variable to see what fields should be checked when the modal opens
 }
+
+function filterGallery(searchString) {
+    let filteredEmployees = employees.filter(employee => employee.displayName.toLowerCase().includes(searchString));
+    gallery.innerHTML = '';
+    displayEmployeeCards(filteredEmployees);
+}
 // Event Listeners
 gallery.addEventListener('click', e => {
     const target = e.target;
@@ -229,7 +235,6 @@ modalBtnContainer.addEventListener('click', e => {
         modalContent.innerHTML = '';
         fetchUsers();
         
-
     } else if (e.target.tagName === 'BUTTON') {
         clearModalContent();
 
@@ -259,6 +264,19 @@ settingsBtn.addEventListener('click', e => {
     displaySettings();
     addModalBtns('settings');
     modalContainer.classList.remove('hide');
+});
+
+searchBtn.addEventListener('click', e => {
+    let searchString = searchInput.value;
+    if (searchString) {
+        console.log(searchString);
+        filterGallery(searchString);
+    }
+});
+
+searchInput.addEventListener('keyup', e => {
+    const searchString = e.target.value;
+    filterGallery(searchString);
 });
 
 /// below function is just to switch between using test data vs using api call to populate employees
