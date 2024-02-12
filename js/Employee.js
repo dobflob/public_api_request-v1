@@ -24,7 +24,7 @@ class Employee {
 
     displayEmployeeCard() {
         const cardHtml = `
-        <div id="${this.email}" class="card">
+        <div id="${this.email}" class="card" title="${this.displayName}">
             <div class="card-img-container">
                 <img class="card-img" src="${this.picture.large}" alt="${this.displayName}'s Profile Picture">
             </div>

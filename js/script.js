@@ -49,7 +49,8 @@ const searchBtn = createHtmlElement('input', [
 const settingsBtn = createHtmlElement('button', [
     {name: 'type', val: 'button'}, 
     {name: 'id', val: 'settings'}, 
-    {name: 'class', val: 'btn'}]);
+    {name: 'class', val: 'btn'},
+    {name: 'title', val: 'Settings'}]);
 settingsBtn.textContent = '\u{1F354}';
 
 document.body.insertAdjacentElement('beforeend', modalContainer);
@@ -127,34 +128,39 @@ function clearModalContent() {
 function displaySettings() {
     const settingsHtml = `
         <form>
+        <h3>Fetch Settings</h3>
             <div class="form-field">
-                <label for="results-count">No. Employess to Fetch:</label>
+                <label for="results-count" class="modal-name">No. Employess to Fetch:</label>
                 <input type="text" id="results-count" class="results-count" minlength="2" maxlength="3"/>
             </div>
             <fieldset>
-                <legend>Select the fields to exclude:</legend>
+                <legend class="modal-name">Select the fields to exclude:</legend>
                 <div>
                     <input type="checkbox" id="gender" name="gender" value="gender"/>
-                    <label for="gender">Gender</label>
+                    <label for="gender" class="modal-text">Gender</label>
                 </div>
                 <div>
                     <input type="checkbox" id="login" name="login" value="login"/>
-                    <label for="login">Login</label>
+                    <label for="login" class="modal-text">Login</label>
                 </div>
                 <div>
                     <input type="checkbox" id="registered" name="registered" value="registered"/>
-                    <label for="registered">Registered</label>
+                    <label for="registered" class="modal-text">Registered</label>
                 </div>
                 <div>
                     <input type="checkbox" id="phone" name="phone" value="phone"/>
-                    <label for="phone">Phone</label>
+                    <label for="phone" class="modal-text">Phone</label>
                 </div>
                 <div>
                     <input type="checkbox" id="id" name="id" value="id"/>
-                    <label for="id">Id</label>
+                    <label for="id" class="modal-text">Id</label>
                 </div>
             </fieldset>
+            <div>
+                <p class="modal-text">Note: Saving will re-fetch the specified number of users. Press cancel to return to the employee gallery without fetching new data.</p>
+            </div>
         </form>
+        
     `;
     
     modalContent.insertAdjacentHTML('beforeend', settingsHtml);
@@ -256,7 +262,9 @@ modalBtnContainer.addEventListener('click', e => {
                 currentEmpIndex = 0;
                 employees[currentEmpIndex].displayEmployeeDetails();
             }
-        } 
+        } else if (e.target.id === 'modal-cancel') {
+            modalContainer.classList.add('hide');
+        }
     }
 });
 
@@ -280,7 +288,7 @@ searchInput.addEventListener('keyup', e => {
 });
 
 /// below function is just to switch between using test data vs using api call to populate employees
-let testing = true;
+let testing = false;
 
 if (testing) {
     employees = testEmployees;
