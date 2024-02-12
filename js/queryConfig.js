@@ -22,7 +22,3 @@ function createQueryString() {
     userRequestUrl += queryStrings.join('&');
     return userRequestUrl;
 }
-
-
-
-//thinking I can show the default values for no, nat, excluded fields and let them be editable. would need the full list of fields from the API (or since there is documentation, just hardcode the fields to reduce API calls...); could also give a set of numbers (12, 24, 36, 48...); and provide a list of country options. Since it's all documented out, could use a <select> for nat and fields and maybe just allow user to enter in the number of fields in a textbox --- could even hide all this in a settings menu / modal ....

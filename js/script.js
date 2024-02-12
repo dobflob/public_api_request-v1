@@ -37,7 +37,7 @@ settingsBtn.textContent = '\u{1F354}';
 
 document.body.insertAdjacentElement('beforeend', modalContainer);
 buildModalSkeleton();
-buildActionArea();
+buildSearchArea();
 
 // Fetch Functions
 async function fetchUsers() {
@@ -45,7 +45,7 @@ async function fetchUsers() {
         .then(res => res.json())
         .then(data => data.results.map(user => new Employee(user)))
         .then(data => cacheEmployees(data))
-        .then(employees => displayEmployeeCards(employees))
+        .then(employees => displayGallery(employees))
         .catch(error => console.log(new Error(error)));
 } 
 
@@ -56,9 +56,11 @@ function createHtmlElement(elTag, elAttrs) {
     return elVar;
 }
 
-function buildActionArea() {
+function buildSearchArea() {
     const searchContainer = document.querySelector('.search-container');
-    const form = createHtmlElement('form', [{name: 'action', val:'#'}, {name: 'method', val: 'get'}]);
+    const form = createHtmlElement('form', [
+        {name: 'action', val:'#'}, 
+        {name: 'method', val: 'get'}]);
 
     form.appendChild(searchInput);
     form.appendChild(searchBtn);
@@ -90,8 +92,19 @@ function addModalBtns(btnType) {
         <button type="submit" id="modal-save" class="modal-save btn">Save</button>
     `;
     }
-    
     modalBtnContainer.insertAdjacentHTML('beforeend', modalBtns);
+}
+
+function toggleModal(val) {
+    if (val ==='show') {
+        modalContainer.classList.remove('hide');
+    } else if (val === 'hide') {
+        modalContainer.classList.add('hide');
+    }
+}
+
+function clearModalContent() {
+    modalContent.innerHTML = '';
 }
 
 function cacheEmployees(data) {
@@ -99,13 +112,9 @@ function cacheEmployees(data) {
     return employees;
 }
 
-function displayEmployeeCards(employees) {
+function displayGallery(employees) {
     employees.forEach(employee => employee.displayEmployeeCard());
     return employees;
-}
-
-function clearModalContent() {
-    modalContent.innerHTML = '';
 }
 
 function displaySettings() {
@@ -143,12 +152,13 @@ function displaySettings() {
                 <p class="modal-text">Note: Saving will re-fetch the specified number of users. Press cancel to return to the employee gallery without fetching new data.</p>
             </div>
         </form>
-        
     `;
     
     modalContent.insertAdjacentHTML('beforeend', settingsHtml);
+
     let settingFields = modalContent.querySelectorAll('input');
     settingFields.forEach(input => {
+
         if (input.type === 'checkbox') {
             if (excludeFields.includes(input.name)) {
                 input.checked = true;
@@ -162,8 +172,9 @@ function displaySettings() {
 function filterGallery(searchString) {
     let filteredEmployees = employees.filter(employee => employee.displayName.toLowerCase().includes(searchString));
     gallery.innerHTML = '';
-    displayEmployeeCards(filteredEmployees);
+    displayGallery(filteredEmployees);
 }
+
 // Event Listeners
 gallery.addEventListener('click', e => {
     const target = e.target;
@@ -182,20 +193,20 @@ gallery.addEventListener('click', e => {
         let selectedEmp = employees.find(emp => emp.email === cardId);
         selectedEmp.displayEmployeeDetails();
         currentEmpIndex = employees.indexOf(selectedEmp);
-        modalContainer.classList.remove('hide');
+        toggleModal('show');
         addModalBtns('nav');
     }
 });
 
 modalClose.addEventListener('click', e => {
-    modalContainer.classList.add('hide');
-    modalContent.innerHTML = '';
+    toggleModal('hide');
+    clearModalContent();
 });
 
 modalContainer.addEventListener('click', e => {
     if (e.target.className === 'modal-container') {
-        modalContainer.classList.add('hide');
-        modalContent.innerHTML = '';
+        toggleModal('hide');
+        clearModalContent();
     }
 });
 
@@ -219,14 +230,15 @@ modalBtnContainer.addEventListener('click', e => {
         });
         
         testing = false;
-        modalContainer.classList.add('hide');
-        modalContent.innerHTML = '';
+        toggleModal('hide');
+        clearModalContent();
         fetchUsers();
         
     } else if (e.target.tagName === 'BUTTON') {
         clearModalContent();
 
         if (e.target.id === 'modal-prev') {
+
             if (currentEmpIndex !== 0) {
                 currentEmpIndex --;
                 employees[currentEmpIndex].displayEmployeeDetails();
@@ -234,7 +246,7 @@ modalBtnContainer.addEventListener('click', e => {
                 currentEmpIndex = lastEmpIndex;
                 employees[currentEmpIndex].displayEmployeeDetails();
             }
-            
+
         } else if (e.target.id === 'modal-next') {
             
             if (currentEmpIndex !== lastEmpIndex) {
@@ -244,8 +256,9 @@ modalBtnContainer.addEventListener('click', e => {
                 currentEmpIndex = 0;
                 employees[currentEmpIndex].displayEmployeeDetails();
             }
+
         } else if (e.target.id === 'modal-cancel') {
-            modalContainer.classList.add('hide');
+            toggleModal('hide');
         }
     }
 });
@@ -253,7 +266,7 @@ modalBtnContainer.addEventListener('click', e => {
 settingsBtn.addEventListener('click', e => {
     displaySettings();
     addModalBtns('settings');
-    modalContainer.classList.remove('hide');
+    toggleModal('show');
 });
 
 searchBtn.addEventListener('click', e => {
