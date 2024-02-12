@@ -1,25 +1,7 @@
 /* Finishing the Project - The final stage is perhaps the most imporant
     - Code Comments: it's best practice for development code to be well commented. Replace provided comments with your own to briefly describe your code
-    - Code Readability: Readability is second only to functionality - Double check your code to ensure the spacing and indentation are consistent
-    - Cross-browser Consistency: To pass, your project only needs to work in Chrome, but it's common for devs to test their projects in multiple browsers to know how they'll perform in the wild
-    - QA Testing: This is the keystone step in the development process:
-        - Open and run your app
-        - Open the Chrome DevTools console
-        - Pretend to be a user and test all aspects of functionality and every possible state of the app, while monitoring the console for bugs and resolving any that arise
 */
 
-/* Extra Credit - to get an "exceeds" rating
-    - Add search functionality:
-        - Filter the directory by name: you'll need to adjust your API request to retrieve a user nationality that will only return data in the English alphabet
-        - Note: your search filter should filter results that are already on the page, so don't request new info from the API
-    - Make it your own: add some custom styling to personalize it and make it stand out
-        - Add or change at least one of the following CSS styles:
-            - color
-            - background-color
-            - font
-            - box or text shadows
-        - Document your style changes in your readme.md file and project submission notes (don't alter the layout or position of the important elements ont he page)
-*/
 /* Variables */
 let employees;
 let currentEmpIndex;
@@ -96,6 +78,7 @@ function addModalBtns(btnType) {
     modalContainer.appendChild(modalBtnContainer);
     modalBtnContainer.innerHTML = '';
     let modalBtns;
+
     if (btnType === 'nav') {
         modalBtns = `
         <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
@@ -174,8 +157,6 @@ function displaySettings() {
             input.value = userNo;
         }
     });
-    
-    //remove checked from the html template and instead look at the excludeFields variable to see what fields should be checked when the modal opens
 }
 
 function filterGallery(searchString) {
@@ -228,14 +209,15 @@ modalBtnContainer.addEventListener('click', e => {
         const inputs = modalContent.querySelectorAll('input');
 
         inputs.forEach(field => {
+
             if (field.type === 'checkbox' && field.checked) {
                 excludeFields.push(field.value);
                 
             } else if (field.type === 'text' && field.value) {
                 userNo = field.value;
             }
-            
         });
+        
         testing = false;
         modalContainer.classList.add('hide');
         modalContent.innerHTML = '';
@@ -276,8 +258,8 @@ settingsBtn.addEventListener('click', e => {
 
 searchBtn.addEventListener('click', e => {
     let searchString = searchInput.value;
+
     if (searchString) {
-        console.log(searchString);
         filterGallery(searchString);
     }
 });
@@ -287,7 +269,7 @@ searchInput.addEventListener('keyup', e => {
     filterGallery(searchString);
 });
 
-/// below function is just to switch between using test data vs using api call to populate employees
+/// below code is to toggle between using test data vs using api call to populate employees. If false, the code uses the random API to pull data.
 let testing = false;
 
 if (testing) {
@@ -302,5 +284,3 @@ function displayTestEmployees() {
     employees = employees.map(employee => new Employee(employee));
     employees.forEach(employee => employee.displayEmployeeCard());
 };
-
-//to do - style the settings fields; add functionality to the search input and button; all the comments; custom styling; update readme
